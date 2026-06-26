@@ -29,9 +29,8 @@ Middleware de Autenticación (authMiddleware.js): Intercepta las solicitudes hac
 Middleware de Validación de Datos: Controla que las peticiones de registro de usuario o creación de publicaciones cuenten con los campos obligatorios bien formateados antes de procesar la lógica de la base de datos.
 
 3. Rutas y Endpoints del Servidor (API REST)
-
 Rutas Públicas:
-POST /api/auth/register -> Registro de nuevas cuentas.
+POST /api/auth/register ->Registro de nuevas cuentas.
 POST /api/auth/login -> Validación de identidad y entrega del token JWT.
 GET /api/publicaciones -> Devuelve los posteos globales almacenados en la base de datos para construir el Feed principal.
 
@@ -43,14 +42,14 @@ POST /api/publicaciones -> Permite al usuario activo crear una nueva publicació
 
 README Obligatorio
 El proyecto deberá incluir un archivo README.md técnico que explique:
-
 Un diagrama textual o descripción detallada de la arquitectura por capas aplicada en el código.
 Estructura SQL de las tablas y relaciones creadas (usuarios y publicaciones).
 Listado completo de endpoints desarrollados aclarando cuáles son públicos, cuáles son protegidos y el formato del JSON que esperan recibir o devolver.
 Explicación de cómo configuraron el middleware de verificación de JWT y qué datos resguardaron dentro de los payloads de los tokens.
+
 Checklist de Entrega para Alumnos
 [ ] Servidor web corriendo con Node.js y Express sin errores de ejecución.
-[ ] Base de datos PostgreSQL activa
+[✓] Base de datos PostgreSQL activa
 [ ] Arquitectura separada estrictamente en carpetas independientes (/routes, /middlewares, /controllers, /services).
 [ ] Emisión de JSON Web Tokens (JWT) válidos tras un login exitoso.
 [ ] Middleware de autenticación funcional protegiendo las rutas privadas de perfil y creación de posts.

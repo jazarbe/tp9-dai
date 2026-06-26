@@ -2,7 +2,7 @@ import express  from "express";
 import cors from "cors";
 import authRouter from "./src/routes/auth.js";
 import postsRouter from "./src/routes/posts.js";
-import usuariosRouter from "./src/routes/usuarios.js";
+import usersRouter from "./src/routes/users.js";
 
 const app  = express();
 const port = 3000;
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
-app.use("/usuarios", usuariosRouter);
+app.use("/users", usersRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
