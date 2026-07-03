@@ -1,9 +1,10 @@
 import { Router } from "express";
-// import { validateUser } from "../middlewares/valUser.js";
-// import {  } from "../controllers/userController.js";
+import UserController from "../controllers/userController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-router.get("/perfil");
-router.put("/perfil");
+const userController = new UserController();
+router.get("/perfil", authMiddleware, userController.getProfile);
+router.put("/perfil", authMiddleware, userController.updateProfile);
 
 export default router;

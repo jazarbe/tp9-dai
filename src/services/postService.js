@@ -1,5 +1,7 @@
 import config from '../config/db.js';
 import pkg from 'pg';
+import LogHelper from '../helpers/logHelper.js'; 
+
 const { Client } = pkg;
 
 export default class PostService {
@@ -7,20 +9,19 @@ export default class PostService {
         const client = new Client(config);
         try {
             await client.connect();
-
             const sql = `
                 SELECT 
                     p.id, 
                     p.user_id, 
-                    p.image_url, 
+                    p.url_image, 
                     p.description, 
                     p.likes, 
-                    p.created_at,
+                    p."creation:date",
                     u.username,
                     u.pfp AS user_pfp
-                FROM "Posts" p
+                FROM "Publicaciones" p
                 JOIN "Usuarios" u ON p.user_id = u.id
-                ORDER BY p.created_at DESC;
+                ORDER BY p."creation:date" DESC;
             `;
             
             const result = await client.query(sql);
@@ -28,7 +29,29 @@ export default class PostService {
             
             return result.rows;
         } catch (error) {
-            console.error("Error en PostService.getAllPosts:", error);
+            LogHelper.logError(error);
+            throw error;
+        }
+    }
+    createPost = async (postData) => {
+        const client = new Client(config);
+        const { url_image, description, userId } = postData;
+        try {
+            await client.connect();
+            
+            const sql = `
+                INSERT INTO "Publicaciones" (url_image, description, likes, "creation:date", user_id)
+                VALUES ($1, $2, 0, NOW(), $3)
+                RETURNING id, url_image, description, likes, "creation:date", user_id;
+            `;
+            
+            const values = [url_image, description, userId];
+            const result = await client.query(sql, values);
+            await client.end();
+            
+            return result.rows[0];
+        } catch (error) {
+            LogHelper.logError(error);
             throw error;
         }
     }

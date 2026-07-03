@@ -1,5 +1,6 @@
 import config from '../config/db.js';
 import pkg from 'pg'
+import LogHelper from '../helpers/logHelper.js';
 const { Client, Pool } = pkg;
 
 export default class AuthService {
@@ -25,7 +26,7 @@ export default class AuthService {
             await client.end();
             return result.rowCount > 0;
         } catch (error) {
-            console.error("Error en checkUserExists:", error);
+            LogHelper.logError(error);
             throw error; 
         }
     }
@@ -44,7 +45,7 @@ export default class AuthService {
             await client.end();
             return result.rows[0];
         } catch (error) {
-            console.error("Error en createUser:", error);
+            LogHelper.logError(error);
             throw error;
         }
     }
