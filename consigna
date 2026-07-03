@@ -1,15 +1,3 @@
-Arquitectura de Software Requerida (Diseño por Capas)
-Para garantizar la mantenibilidad y escalabilidad del código, el servidor debe estructurarse obligatoriamente siguiendo la arquitectura orientada a servicios y separación de responsabilidades que se detalla a continuación:
-
-/src
-  ├── /config        --> Conexión y credenciales de la Base de Datos (Pool de pg).
-  ├── /controllers   --> Lógica de negocio. Reciben req y envían res. Llama a los servicios.
-  ├── /middlewares   --> Funciones de intercepción (Validación de tokens, esquemas de datos).
-  ├── /routes        --> Definición de endpoints y asociación con middlewares y controladores.
-  ├── /services      --> Capa de datos pura. Consultas SQL (queries) directas a la BD.
-  └── app.js         --> Inicialización de Express, configuración de CORS y puerto.
-
-
 Responsabilidades detalladas por Carpeta:
 /config: Archivo de inicialización de la conexión (db.js). Utiliza variables de entorno (.env) para resguardar las credenciales críticas del servidor local de PostgreSQL de forma segura.
 /routes: Contiene los archivos de enrutamiento (ej: authRoutes.js, userRoutes.js, postRoutes.js). Su única función es definir el verbo HTTP, el endpoint y delegar la ejecución a los middlewares y controladores correspondientes.
@@ -21,7 +9,7 @@ Responsabilidades detalladas por Carpeta:
 Requisitos Mínimos del Backend
 1. Módulo de Autenticación y Cifrado
 Registro (POST /api/auth/register): Recibe datos de usuario, verifica que el email o el nickname no estén duplicados.
-OPCIONAL: Cifra la contraseña utilizando una librería de hash (por ejemplo, bcrypt o similar) antes de guardarla en la tabla.
+-- OPCIONAL: Cifra la contraseña utilizando una librería de hash (por ejemplo, bcrypt o similar) antes de guardarla en la tabla.
 Login (POST /api/auth/login): Valida las credenciales ingresadas contra los registros de la base de datos. Si coinciden, genera un token firmado utilizando JWT que expira en un tiempo determinado (ej: 2 horas) y lo devuelve al cliente.
 
 2. Capa de Middlewares Obligatorios
