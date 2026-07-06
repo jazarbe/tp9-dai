@@ -1,6 +1,7 @@
 import AuthService from "../services/authService.js"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
+import LogHelper from "../helpers/logHelper.js";
 
 const authService = new AuthService()
 const SECRET_KEY = process.env.JWT_SECRET || "ClaveSecreta2000$"; 
@@ -33,7 +34,7 @@ export default class AuthController {
             });
 
         } catch (error) {
-            console.error("Error en logIn:", error);
+            LogHelper.logError(error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
@@ -67,11 +68,12 @@ export default class AuthController {
             });
 
         } catch (error) {
-            console.error("Error en signUp:", error);
+            LogHelper.logError(error);
             return res.status(500).json({ error: 'Error interno del servidor al registrar el usuario' });
         }
     }
 }
+
 // import AuthService from "../services/authService.js"
 // import bcrypt from "bcrypt";
 

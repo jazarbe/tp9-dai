@@ -1,4 +1,5 @@
 import PostService from "../services/postService.js";
+import LogHelper from "../helpers/logHelper.js";
 
 const postService = new PostService();
 
@@ -24,7 +25,7 @@ export default class PostController {
                 post: newPost 
             });
         } catch (error) {
-            console.error("Error en PostController.create:", error);
+            LogHelper.logError(error);
             return res.status(500).json({ error: 'Error interno del servidor al crear la publicación' });
         }
     }

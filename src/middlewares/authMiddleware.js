@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
-const SECRET_KEY = process.env.JWT_SECRET || "ClaveSecreta2000$"; 
+import LogHelper from "../helpers/logHelper.js";
+
+const SECRET_KEY = process.env.JWT_SECRET; 
 
 export const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -14,6 +16,7 @@ export const authMiddleware = (req, res, next) => {
         req.user = decoded; 
         next(); 
     } catch (error) {
+        LogHelper.logError(error);
         return res.status(401).json({ error: "Token inválido o expirado." });
     }
 };

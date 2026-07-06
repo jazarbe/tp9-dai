@@ -1,4 +1,5 @@
 import UserService from "../services/userService.js";
+import logHelper from "../helpers/logHelper.js";
 
 const userService = new UserService();
 
@@ -14,7 +15,7 @@ export default class UserController {
 
             return res.status(200).json(profileData);
         } catch (error) {
-            console.error("Error en getProfile:", error);
+            logHelper.logError(error);
             return res.status(500).json({ error: 'Error al obtener el perfil' });
         }
     }
@@ -30,7 +31,7 @@ export default class UserController {
                 user: updatedUser 
             });
         } catch (error) {
-            console.error("Error en updateProfile:", error);
+            logHelper.logError(error);
             return res.status(500).json({ error: 'Error al actualizar el perfil' });
         }
     }
