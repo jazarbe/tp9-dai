@@ -9,7 +9,7 @@ export default class AuthService {
         const client = new Client(config);
         try {
             await client.connect();
-            const sql = `SELECT * FROM \"Usuarios\" WHERE username = $1`;
+            const sql = `SELECT * FROM "Usuarios" WHERE username = $1`;
             const result = await client.query(sql, [username]);
             await client.end();
             returnArray = (result.rows && result.rows.length > 0) ? result.rows[0] : null;

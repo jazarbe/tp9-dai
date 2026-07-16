@@ -11,11 +11,11 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", authRouter);
-app.use("/posts", postsRouter);
-app.use("/usuarios", usersRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/posts", postsRouter);
+app.use("/api/usuarios", usersRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-    console.log(`http://localhost:${port}/api`);
+    console.log(`http://localhost:${port}`);
 });

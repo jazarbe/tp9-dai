@@ -1,5 +1,6 @@
-import 'dotenv/config' 
+import 'dotenv/config'
 import fs from 'fs';
+import path from 'path';
 
 class LogHelper {
     constructor() {
@@ -14,14 +15,29 @@ class LogHelper {
      * */
     
     getRoute = () => {
-        return this.filePath + this.fileName
+        return path.join(this.filePath || '', this.fileName || '');
     }
 
     logError = (errorObject) => {
-        console.log(errorObject)
-        fs.writeFile(this.getRoute, errorObject, (err) => {
-            if (err) throw err
-        })
+        const errorString = errorObject instanceof Error
+            ? `${errorObject.name}: ${errorObject.message}\n${errorObject.stack}`
+            : typeof errorObject === 'object'
+                ? JSON.stringify(errorObject, null, 2)
+                : String(errorObject);
+
+        const logEntry = `${new Date().toISOString()} - ${errorString}\n`;
+
+        if (this.logToConsoleEnabled) {
+            console.error(logEntry);
+        }
+
+        if (this.logToFileEnabled && this.filePath && this.fileName) {
+            fs.appendFile(this.getRoute(), logEntry, (err) => {
+                if (err) {
+                    console.error('Failed to write log file:', err);
+                }
+            });
+        }
     }
 }
 

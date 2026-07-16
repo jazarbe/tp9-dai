@@ -1,45 +1,6 @@
-Responsabilidades detalladas por Carpeta:
-/config: Archivo de inicialización de la conexión (db.js). Utiliza variables de entorno (.env) para resguardar las credenciales críticas del servidor local de PostgreSQL de forma segura.
-/routes: Contiene los archivos de enrutamiento (ej: authRoutes.js, userRoutes.js, postRoutes.js). Su única función es definir el verbo HTTP, el endpoint y delegar la ejecución a los middlewares y controladores correspondientes.
-/middlewares: Capa de control intermedia. Se encarga de capturar las peticiones antes de que toquen los controladores para ejecutar tareas como verificar la firma del token JWT o validar el formato del correo y contraseña.
-/controllers: Gestiona el flujo de la petición. Extrae los parámetros (de req.body, req.params o req.query), invoca los métodos de los servicios, maneja las respuestas HTTP exitosas (200 OK, 201 Created) y los bloques de captura de errores (400 Bad Request, 401 Unauthorized, 500 Error Interno).
-/services: Responsable exclusivo de interactuar con la Base de Datos mediante sentencias SQL. No conoce el funcionamiento de la web (no maneja req ni res). Ejecuta promesas que retornan los registros de la base de datos o lanzan excepciones.
-
-
-Requisitos Mínimos del Backend
-1. Módulo de Autenticación y Cifrado
-Registro (POST /api/auth/register): Recibe datos de usuario, verifica que el email o el nickname no estén duplicados.
--- OPCIONAL: Cifra la contraseña utilizando una librería de hash (por ejemplo, bcrypt o similar) antes de guardarla en la tabla.
-Login (POST /api/auth/login): Valida las credenciales ingresadas contra los registros de la base de datos. Si coinciden, genera un token firmado utilizando JWT que expira en un tiempo determinado (ej: 2 horas) y lo devuelve al cliente.
-
-2. Capa de Middlewares Obligatorios
-Middleware de Autenticación (authMiddleware.js): Intercepta las solicitudes hacia rutas protegidas. Debe leer el header Authorization, extraer el token (formato Bearer <token>), verificar su firma y validez. Si el token es correcto, adjunta los datos del usuario decodificado a la petición (req.user) y permite el paso. Si falta o expiró, corta la petición devolviendo un estado 401 Unauthorized.
-Middleware de Validación de Datos: Controla que las peticiones de registro de usuario o creación de publicaciones cuenten con los campos obligatorios bien formateados antes de procesar la lógica de la base de datos.
-
-3. Rutas y Endpoints del Servidor (API REST)
-Rutas Públicas:
-POST /api/auth/register ->Registro de nuevas cuentas.
-POST /api/auth/login -> Validación de identidad y entrega del token JWT.
-GET /api/publicaciones -> Devuelve los posteos globales almacenados en la base de datos para construir el Feed principal.
-
-Rutas Protegidas (Requieren pasar el Middleware de Autenticación):
-GET /api/usuarios/perfil -> Retorna la información detallada del perfil del usuario autenticado (extraído del token) para renderizar su pantalla personal: foto, biografía, contadores y sus publicaciones asociadas (haciendo un JOIN o query filtrado por su usuario_id).
-PUT /api/usuarios/perfil -> Permite al usuario activo editar su propia biografía, nombre completo o cambiar su foto de perfil.
-POST /api/publicaciones -> Permite al usuario activo crear una nueva publicación de gato. El backend guarda automáticamente el post asignándolo al id del usuario autenticado que viene en el token.
-
-
 README Obligatorio
 El proyecto deberá incluir un archivo README.md técnico que explique:
 Un diagrama textual o descripción detallada de la arquitectura por capas aplicada en el código.
 Estructura SQL de las tablas y relaciones creadas (usuarios y publicaciones).
 Listado completo de endpoints desarrollados aclarando cuáles son públicos, cuáles son protegidos y el formato del JSON que esperan recibir o devolver.
 Explicación de cómo configuraron el middleware de verificación de JWT y qué datos resguardaron dentro de los payloads de los tokens.
-
-Checklist de Entrega para Alumnos
-[ ] Servidor web corriendo con Node.js y Express sin errores de ejecución.
-[✓] Base de datos PostgreSQL activa
-[ ] Arquitectura separada estrictamente en carpetas independientes (/routes, /middlewares, /controllers, /services).
-[ ] Emisión de JSON Web Tokens (JWT) válidos tras un login exitoso.
-[ ] Middleware de autenticación funcional protegiendo las rutas privadas de perfil y creación de posts.
-[ ] Endpoint de perfil que devuelva la información del usuario correspondiente dinámicamente según el token provisto.
-[ ] Manejo de variables de entorno mediante un archivo .env (dejar un .env.example en el repositorio).
